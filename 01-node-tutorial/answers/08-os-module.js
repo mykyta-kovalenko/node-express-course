@@ -1,16 +1,16 @@
-const os = require("os");
+import { release as _release, userInfo as _userInfo, freemem, totalmem, type, uptime } from "os";
 
 const currentOS = {
-    name: os.type(),
-    release: os.release(),
-    totalMem: os.totalmem(),
-    freeMem: os.freemem(),
+    name: type(),
+    release: _release(),
+    totalMem: totalmem(),
+    freeMem: freemem(),
 };
 
-console.log(`Current OS uptime is ${(os.uptime() / 60).toFixed(2)} minutes.`);
+console.log(`Current OS uptime is ${(uptime() / 60).toFixed(2)} minutes.`);
 
 console.log(currentOS);
 
-const userInfo = os.userInfo();
+const userInfo = _userInfo();
 
 console.log(userInfo);
