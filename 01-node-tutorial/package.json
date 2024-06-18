@@ -2,6 +2,7 @@
   "name": "tutorial",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "1-intro.js",
   "scripts": {
     "start": "nodemon app.js"
