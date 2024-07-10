@@ -1,19 +1,19 @@
-import { createServer } from "http";
-import { StringDecoder } from "string_decoder";
+import { createServer } from 'http';
+import { StringDecoder } from 'string_decoder';
 
 const getBody = (req, callback) => {
-  const decode = new StringDecoder("utf-8");
-  let body = "";
-  req.on("data", function (data) {
+  const decode = new StringDecoder('utf-8');
+  let body = '';
+  req.on('data', function (data) {
     body += decode.write(data);
   });
-  req.on("end", function () {
+  req.on('end', function () {
     body += decode.end();
     const body1 = decodeURI(body);
-    const bodyArray = body1.split("&");
+    const bodyArray = body1.split('&');
     const resultHash = {};
     bodyArray.forEach((part) => {
-      const partArray = part.split("=");
+      const partArray = part.split('=');
       resultHash[partArray[0]] = partArray[1];
     });
     callback(resultHash);
@@ -25,7 +25,6 @@ const message = 'Guess a number between 1 and 100.';
 
 let attempts = 0;
 let targetNumber = Math.floor(Math.random() * 100) + 1;
-
 
 // here, you can change the form below to modify the input fields and what is displayed.
 // This is just ordinary html with string interpolation.
@@ -88,15 +87,15 @@ const form = (feedback = '') => {
 };
 
 const server = createServer((req, res) => {
-  console.log("req.method is ", req.method);
-  console.log("req.url is ", req.url);
-  if (req.method === "POST") {
+  console.log('req.method is ', req.method);
+  console.log('req.url is ', req.url);
+  if (req.method === 'POST') {
     getBody(req, (body) => {
-      console.log("The body of the post is ", body);
+      console.log('The body of the post is ', body);
 
       // here, you can add your own logic
-      const guess = parseInt(body["guess"]);
-      let feedback = "";
+      const guess = parseInt(body['guess']);
+      let feedback = '';
       attempts++;
 
       if (guess === targetNumber) {
@@ -110,7 +109,7 @@ const server = createServer((req, res) => {
       }
       // Your code changes would end here
 
-      res.writeHead(200, { "Content-Type": "text/html" });
+      res.writeHead(200, { 'Content-Type': 'text/html' });
       res.end(form(feedback));
     });
   } else {
@@ -118,5 +117,9 @@ const server = createServer((req, res) => {
   }
 });
 
+server.on('request', (req) => {
+  console.log('event received: ', req.method, req.url);
+});
+
 server.listen(3000);
-console.log("The server is listening on port 3000.");
+console.log('The server is listening on port 3000.');
