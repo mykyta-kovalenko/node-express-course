@@ -1,0 +1,23 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products</title>
+</head>
+<body>
+  <h1>Welcome to My Web Page</h1>
+  <button id="fetchButton">Fetch Products</button>
+  <div id="products"></div>
+  <script>
+    const fetchButton = document.getElementById('fetchButton');
+    const products = document.getElementById('products');
+
+    fetchButton.addEventListener('click', async () => {
+      const response = await fetch('/api/v1/products');
+      const data = await response.json();
+      products.innerHTML = data.map((product) => `<p>${product.name}</p>`).join('');
+    });
+  </script>
+</body>
+</html>
