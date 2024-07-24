@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import './db/connect.js';
 import { connectDB } from './db/connect.js';
+import { errorHandler } from './middleware/error-handler.js';
+import { notFound } from './middleware/not-found.js';
 import tasksRouter from './routes/tasks-router.js';
 
 const app = express();
@@ -11,15 +13,12 @@ dotenv.config();
 app.use(express.json());
 
 app.use('/api/v1/tasks', tasksRouter);
-app.get('/hello', (req, res) => {
-  res.send('Task Manager App');
-});
 
-app.all('*', (req, res) => {
-  res.status(404).send('Resource not found');
-});
+app.use(notFound);
+app.use(errorHandler);
 
-const port = 3000;
+const port = process.env.PORT || 3000;
+
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
