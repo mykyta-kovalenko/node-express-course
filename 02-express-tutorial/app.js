@@ -2,10 +2,25 @@ console.log('Express Tutorial');
 
 import express from 'express';
 import data from './data.js';
+import peopleRouter from './routes/people-router.js';
 
 const app = express();
 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 app.use(express.static('./public'));
+
+const logger = (req, res, next) => {
+  const method = req.method;
+  const url = req.url;
+  console.log(method, url);
+  next();
+};
+
+app.use(logger);
+
+app.use('/api/v1/people', peopleRouter);
 
 app.get('/', (req, res) => {
   res.status(200).send('Home Page');
@@ -37,6 +52,7 @@ app.get('/api/v1/query', (req, res) => {
       (product) => product.price <= parseInt(maxPrice)
     );
   }
+
   res.status(200).json(filteredData);
 });
 
@@ -56,5 +72,5 @@ app.all('*', (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Server is listening on port 3000...');
+  console.log('Server is listening on port 3000....');
 });
