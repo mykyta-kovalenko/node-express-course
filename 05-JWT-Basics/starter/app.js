@@ -1,18 +1,18 @@
-require('dotenv').config();
-require('express-async-errors');
+import 'dotenv/config';
+import express from 'express';
+import 'express-async-errors';
+import errorHandlerMiddleware from './middleware/error-handler-middleware.js';
+import notFoundMiddleware from './middleware/not-found-middleware.js';
+import authRouter from './routes/auth-router.js';
 
-const express = require('express');
 const app = express();
 
-const notFoundMiddleware = require('./middleware/not-found');
-const errorHandlerMiddleware = require('./middleware/error-handler');
-
-// middleware
-app.use(express.static('./public'));
 app.use(express.json());
 
-app.use(notFoundMiddleware);
+app.use('/api/v1', authRouter);
+
 app.use(errorHandlerMiddleware);
+app.use(notFoundMiddleware);
 
 const port = process.env.PORT || 3000;
 
